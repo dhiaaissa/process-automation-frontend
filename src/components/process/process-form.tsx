@@ -3,32 +3,31 @@
 import { useState } from "react";
 
 interface ProcessFormProps {
-  onSubmit: (data: { title: string; description: string; user_story: string }) => void;
+  onSubmit: (data: { name: string; description: string }) => void;
   loading?: boolean;
-  initialData?: { title?: string; description?: string; user_story?: string };
+  initialData?: { name?: string; description?: string };
 }
 
 export function ProcessForm({ onSubmit, loading = false, initialData }: ProcessFormProps) {
-  const [title, setTitle] = useState(initialData?.title || "");
+  const [name, setName] = useState(initialData?.name || "");
   const [description, setDescription] = useState(initialData?.description || "");
-  const [userStory, setUserStory] = useState(initialData?.user_story || "");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ title, description, user_story: userStory });
+    onSubmit({ name, description });
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
-        <label htmlFor="title" className="text-sm font-medium">
-          Titre du processus *
+        <label htmlFor="name" className="text-sm font-medium">
+          Nom du processus *
         </label>
         <input
-          id="title"
+          id="name"
           type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           placeholder="Ex: Processus de validation des commandes"
           className="w-full px-3 py-2 border rounded-md bg-background"
           required
@@ -37,26 +36,12 @@ export function ProcessForm({ onSubmit, loading = false, initialData }: ProcessF
 
       <div className="space-y-2">
         <label htmlFor="description" className="text-sm font-medium">
-          Description
-        </label>
-        <input
-          id="description"
-          type="text"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Breve description du processus"
-          className="w-full px-3 py-2 border rounded-md bg-background"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <label htmlFor="user_story" className="text-sm font-medium">
-          Description detaillee du processus (User Story) *
+          Description detaillee du processus *
         </label>
         <textarea
-          id="user_story"
-          value={userStory}
-          onChange={(e) => setUserStory(e.target.value)}
+          id="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           placeholder="Decrivez votre processus etape par etape. Ex: Le client soumet une demande. Le manager verifie les informations. Le systeme envoie une notification..."
           className="w-full px-3 py-2 border rounded-md bg-background min-h-[200px] resize-y"
           required
@@ -68,7 +53,7 @@ export function ProcessForm({ onSubmit, loading = false, initialData }: ProcessF
 
       <button
         type="submit"
-        disabled={loading || !title || !userStory}
+        disabled={loading || !name || !description}
         className="px-6 py-2 bg-primary text-primary-foreground rounded-md hover:opacity-90 disabled:opacity-50"
       >
         {loading ? "Creation en cours..." : "Creer le processus"}

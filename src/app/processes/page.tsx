@@ -50,20 +50,21 @@ export default function ProcessesPage() {
         <div className="grid gap-4">
           {processes.map((process) => (
             <Link
-              key={process.id}
-              href={`/processes/${process.id}`}
+              key={process._id}
+              href={`/processes/${process._id}`}
               className="block p-4 border rounded-lg hover:border-primary hover:shadow transition-all"
             >
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-semibold text-lg">{process.title}</h3>
+                  <h3 className="font-semibold text-lg">{process.name}</h3>
                   <p className="text-sm text-muted-foreground mt-1">
-                    {process.description || "Pas de description"}
+                    {process.analysis?.summary
+                      ? `${process.analysis.summary.totalSteps} etapes, ${process.analysis.summary.totalActors} acteurs`
+                      : "Pas encore analyse"}
                   </p>
                 </div>
                 <div className="text-right text-sm text-muted-foreground">
-                  <p>{process.steps?.length || 0} etapes</p>
-                  <p>{process.actors?.length || 0} acteurs</p>
+                  <p className="capitalize">{process.status}</p>
                 </div>
               </div>
             </Link>

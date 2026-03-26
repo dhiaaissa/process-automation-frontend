@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { apiClient } from "@/lib/api";
-import { Process, Evaluation } from "@/lib/types";
+import { Process } from "@/lib/types";
 import { ProcessAnalysis } from "@/components/process/process-analysis";
 import { ScoreDisplay } from "@/components/dashboard/score-display";
 import { RecommendationList } from "@/components/dashboard/recommendation-list";
@@ -13,7 +13,6 @@ export default function ProcessDetailPage() {
   const processId = params.id as string;
 
   const [process, setProcess] = useState<Process | null>(null);
-  const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
 
@@ -22,12 +21,6 @@ export default function ProcessDetailPage() {
       try {
         const processData = await apiClient.getProcess(processId);
         setProcess(processData);
-        try {
-          const evalData = await apiClient.getEvaluation(processId);
-          setEvaluation(evalData);
-        } catch {
-          // No evaluation yet
-        }
       } catch (error) {
         console.error("Error:", error);
       } finally {
@@ -40,8 +33,8 @@ export default function ProcessDetailPage() {
   const handleAnalyze = async () => {
     setAnalyzing(true);
     try {
-      const analysis = await apiClient.analyzeProcess(processId);
-      setProcess((prev) => prev ? { ...prev, steps: analysis.steps, actors: analysis.actors } : null);
+      const updatedProcess = await apiClient.analyzeProcess(processId);
+      setProcess(updatedProcess);
     } catch (error) {
       console.error("Analysis error:", error);
     } finally {
@@ -56,8 +49,8 @@ export default function ProcessDetailPage() {
     <div className="space-y-8">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-2xl font-bold">{process.title}</h1>
-          <p className="text-muted-foreground mt-1">{process.description}</p>
+          <h1 className="text-2xl font-bold">{process.name}</h1>
+          <p className="text-muted-foreground mt-1 capitalize">Statut: {process.status}</p>
         </div>
         <button
           onClick={handleAnalyze}
@@ -70,18 +63,19 @@ export default function ProcessDetailPage() {
 
       <div className="p-4 border rounded-lg bg-muted/50">
         <h2 className="font-semibold mb-2">Description du processus</h2>
-        <p className="whitespace-pre-wrap">{process.user_story}</p>
+        <p className="whitespace-pre-wrap">{process.description}</p>
       </div>
 
-      {process.steps && process.steps.length > 0 && (
-        <ProcessAnalysis steps={process.steps} actors={process.actors || []} />
+      {process.analysis && (
+        <ProcessAnalysis analysis={process.analysis} />
       )}
 
-      {evaluation && (
-        <> 
-          <ScoreDisplay evaluation={evaluation} />
-          <RecommendationList evaluationId={evaluation.id} />
-        </>
+      {process.scoring && (
+        <ScoreDisplay scoring={process.scoring} />
+      )}
+
+      {process.recommendations && process.recommendations.length > 0 && (
+        <RecommendationList recommendations={process.recommendations} />
       )}
     </div>
   );

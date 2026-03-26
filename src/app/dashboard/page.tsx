@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { apiClient } from "@/lib/api";
-import { DashboardStats } from "@/lib/types";
+import { DashboardStats, DashboardProcess } from "@/lib/types";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import { AutomationChart } from "@/components/dashboard/automation-chart";
 import { ProcessTable } from "@/components/dashboard/process-table";
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [processes, setProcesses] = useState<any[]>([]);
+  const [processes, setProcesses] = useState<DashboardProcess[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,10 +17,10 @@ export default function DashboardPage() {
       try {
         const [statsData, processesData] = await Promise.all([
           apiClient.getDashboardStats(),
-          apiClient.getDashboardProcesses(),
+          apiClient.getDashboardOverview(),
         ]);
         setStats(statsData);
-        setProcesses(processesData.processes || []);
+        setProcesses(processesData || []);
       } catch (error) {
         console.error("Dashboard error:", error);
       } finally {
@@ -36,7 +36,7 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <h1 className="text-2xl font-bold">Tableau de Bord</h1>
       {stats && <StatsCards stats={stats} />}
-      {stats && <AutomationChart distribution={stats.automation_distribution} />}
+      {stats && <AutomationChart distribution={stats.classificationBreakdown} />}
       <ProcessTable processes={processes} />
     </div>
   );

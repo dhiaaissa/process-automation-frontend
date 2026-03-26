@@ -10,12 +10,12 @@ export default function NewProcessPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (data: { title: string; description: string; user_story: string }) => {
+  const handleSubmit = async (data: { name: string; description: string }) => {
     setLoading(true);
     setError(null);
     try {
       const process = await apiClient.createProcess(data);
-      router.push(`/processes/${process.id}`);
+      router.push(`/processes/${process._id}`);
     } catch (err) {
       setError("Erreur lors de la creation du processus");
       console.error(err);
@@ -28,7 +28,7 @@ export default function NewProcessPage() {
     <div className="max-w-3xl mx-auto space-y-6">
       <h1 className="text-2xl font-bold">Nouveau Processus</h1>
       <p className="text-muted-foreground">
-        Decrivez votre processus metier sous forme de texte (user story). La plateforme
+        Decrivez votre processus metier sous forme de texte. La plateforme
         analysera automatiquement les etapes, acteurs et actions.
       </p>
       {error && (
