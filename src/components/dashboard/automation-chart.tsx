@@ -1,0 +1,47 @@
+"use client";
+
+interface AutomationChartProps {
+  distribution: {
+    automatisable: number;
+    semi_automatisable: number;
+    non_automatisable: number;
+  };
+}
+
+export function AutomationChart({ distribution }: AutomationChartProps) {
+  const total = distribution.automatisable + distribution.semi_automatisable + distribution.non_automatisable;
+
+  const items = [
+    { label: "Automatisable", value: distribution.automatisable, color: "bg-green-500" },
+    { label: "Semi-automatisable", value: distribution.semi_automatisable, color: "bg-yellow-500" },
+    { label: "Non automatisable", value: distribution.non_automatisable, color: "bg-red-500" },
+  ];
+
+  return (
+    <div className="p-6 border rounded-lg bg-card">
+      <h3 className="font-semibold mb-4">Distribution de l'automatisation</h3>
+      {total === 0 ? (
+        <p className="text-muted-foreground text-center py-4">Aucune donnee disponible</p>
+      ) : (
+        <div className="space-y-4">
+          {items.map((item) => (
+            <div key={item.label} className="space-y-1">
+              <div className="flex justify-between text-sm">
+                <span>{item.label}</span>
+                <span className="font-medium">
+                  {item.value} ({total > 0 ? Math.round((item.value / total) * 100) : 0}%)
+                </span>
+              </div>
+              <div className="w-full bg-muted rounded-full h-3">
+                <div
+                  className={`${item.color} h-3 rounded-full transition-all`}
+                  style={{ width: `${total > 0 ? (item.value / total) * 100 : 0}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
