@@ -1,7 +1,6 @@
 "use client";
 
 import { DashboardStats } from "@/lib/types";
-import { getAutomationLevelColor, getAutomationLevelLabel } from "@/lib/utils";
 
 interface StatsCardsProps {
   stats: DashboardStats;
@@ -9,18 +8,15 @@ interface StatsCardsProps {
 
 export function StatsCards({ stats }: StatsCardsProps) {
   const cards = [
-    { label: "Total Processus", value: stats.total_processes, icon: "📋" },
-    { label: "Evaluations", value: stats.total_evaluations, icon: "📊" },
-    { label: "Score Moyen", value: stats.average_score, icon: "⚡" },
-    {
-      label: "Automatisables",
-      value: stats.automation_distribution.automatisable,
-      icon: "✅",
-    },
+    { label: "Total Processus", value: stats.totalProcesses, icon: "📋" },
+    { label: "Analyses", value: stats.analyzedProcesses, icon: "📊" },
+    { label: "En attente", value: stats.pendingProcesses, icon: "⏳" },
+    { label: "Score Moyen", value: stats.averageScore, icon: "⚡" },
+    { label: "% Automatisable", value: `${stats.automatablePercentage}%`, icon: "✅" },
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       {cards.map((card, i) => (
         <div key={i} className="p-4 border rounded-lg bg-card">
           <div className="flex items-center gap-3">

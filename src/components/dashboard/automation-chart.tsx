@@ -2,19 +2,19 @@
 
 interface AutomationChartProps {
   distribution: {
-    automatisable: number;
-    semi_automatisable: number;
-    non_automatisable: number;
+    automatable: number;
+    semiAutomatable: number;
+    notAutomatable: number;
   };
 }
 
 export function AutomationChart({ distribution }: AutomationChartProps) {
-  const total = distribution.automatisable + distribution.semi_automatisable + distribution.non_automatisable;
+  const total = distribution.automatable + distribution.semiAutomatable + distribution.notAutomatable;
 
   const items = [
-    { label: "Automatisable", value: distribution.automatisable, color: "bg-green-500" },
-    { label: "Semi-automatisable", value: distribution.semi_automatisable, color: "bg-yellow-500" },
-    { label: "Non automatisable", value: distribution.non_automatisable, color: "bg-red-500" },
+    { label: "Automatisable", value: distribution.automatable, color: "bg-green-500" },
+    { label: "Semi-automatisable", value: distribution.semiAutomatable, color: "bg-yellow-500" },
+    { label: "Non automatisable", value: distribution.notAutomatable, color: "bg-red-500" },
   ];
 
   return (

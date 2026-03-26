@@ -1,57 +1,89 @@
 export interface ProcessStep {
-  step_number: number;
+  order: number;
   description: string;
-  actor: string | null;
-  action: string | null;
-  estimated_time: number | null;
 }
 
-export interface Process {
-  id: string;
-  title: string;
-  description: string | null;
-  user_story: string;
+export interface ProcessAction {
+  verb: string;
+  object: string;
+}
+
+export interface ProcessAnalysis {
   steps: ProcessStep[];
   actors: string[];
-  created_at: string;
-  updated_at: string;
+  actions: ProcessAction[];
+  repetitiveTasks: string[];
+  humanInterventions: string[];
+  timeIndicators: string[];
+  summary: {
+    totalSteps: number;
+    totalActors: number;
+    totalActions: number;
+    repetitiveTaskCount: number;
+    humanInterventionCount: number;
+  };
 }
 
-export interface EvaluationCriteria {
-  steps_count_score: number;
-  repetitive_tasks_score: number;
-  human_intervention_score: number;
-  volume_score: number;
-  business_rules_score: number;
-  data_structure_score: number;
+export interface ScoringCriterion {
+  score: number;
+  maxScore: number;
+  description: string;
 }
 
-export interface Evaluation {
-  id: string;
-  process_id: string;
-  criteria: EvaluationCriteria;
-  total_score: number;
-  automation_level: string;
-  created_at: string;
+export interface ProcessScoring {
+  criteria: {
+    numberOfSteps: ScoringCriterion;
+    repetitiveTasks: ScoringCriterion;
+    humanIntervention: ScoringCriterion;
+    volume: ScoringCriterion;
+    businessRules: ScoringCriterion;
+    dataStructure: ScoringCriterion;
+  };
+  totalScore: number;
+  maxPossibleScore: number;
+  percentage: number;
+  classification: string;
 }
 
 export interface Recommendation {
-  id: string;
-  evaluation_id: string;
-  process_id: string;
-  category: string;
+  condition: string;
   suggestion: string;
-  priority: string;
-  created_at: string;
+  priority: "high" | "medium" | "low";
+}
+
+export interface Process {
+  _id: string;
+  name: string;
+  description: string;
+  status: "pending" | "analyzed";
+  analysis?: ProcessAnalysis;
+  scoring?: ProcessScoring;
+  recommendations?: Recommendation[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface DashboardStats {
-  total_processes: number;
-  total_evaluations: number;
-  automation_distribution: {
-    automatisable: number;
-    semi_automatisable: number;
-    non_automatisable: number;
+  totalProcesses: number;
+  analyzedProcesses: number;
+  pendingProcesses: number;
+  averageScore: number;
+  automatablePercentage: number;
+  classificationBreakdown: {
+    automatable: number;
+    semiAutomatable: number;
+    notAutomatable: number;
   };
-  average_score: number;
+}
+
+export interface DashboardProcess {
+  id: string;
+  name: string;
+  status: string;
+  totalScore: number;
+  percentage: number;
+  classification: string;
+  recommendationCount: number;
+  createdAt: string;
+  updatedAt: string;
 }

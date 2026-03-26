@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { DashboardProcess } from "@/lib/types";
 import { getAutomationLevelColor, getAutomationLevelLabel } from "@/lib/utils";
 
 interface ProcessTableProps {
-  processes: any[];
+  processes: DashboardProcess[];
 }
 
 export function ProcessTable({ processes }: ProcessTableProps) {
@@ -14,10 +15,10 @@ export function ProcessTable({ processes }: ProcessTableProps) {
         <thead className="bg-muted">
           <tr>
             <th className="text-left p-3 text-sm font-medium">Processus</th>
-            <th className="text-center p-3 text-sm font-medium">Etapes</th>
-            <th className="text-center p-3 text-sm font-medium">Acteurs</th>
+            <th className="text-center p-3 text-sm font-medium">Statut</th>
             <th className="text-center p-3 text-sm font-medium">Score</th>
             <th className="text-center p-3 text-sm font-medium">Niveau</th>
+            <th className="text-center p-3 text-sm font-medium">Recommandations</th>
           </tr>
         </thead>
         <tbody>
@@ -32,23 +33,25 @@ export function ProcessTable({ processes }: ProcessTableProps) {
               <tr key={process.id} className="border-t hover:bg-muted/50">
                 <td className="p-3">
                   <Link href={`/processes/${process.id}`} className="text-primary hover:underline font-medium">
-                    {process.title}
+                    {process.name}
                   </Link>
                 </td>
-                <td className="text-center p-3">{process.steps_count}</td>
-                <td className="text-center p-3">{process.actors_count}</td>
+                <td className="text-center p-3 capitalize">{process.status}</td>
                 <td className="text-center p-3 font-medium">
-                  {process.total_score !== null ? `${process.total_score}/30` : "-"}
+                  {process.totalScore !== null && process.totalScore !== undefined
+                    ? `${process.totalScore} (${process.percentage}%)`
+                    : "-"}
                 </td>
                 <td className="text-center p-3">
-                  {process.automation_level ? (
-                    <span className={`px-2 py-1 rounded text-xs font-medium border ${getAutomationLevelColor(process.automation_level)}`}>  
-                      {getAutomationLevelLabel(process.automation_level)}
+                  {process.classification ? (
+                    <span className={`px-2 py-1 rounded text-xs font-medium border ${getAutomationLevelColor(process.classification)}`}>
+                      {getAutomationLevelLabel(process.classification)}
                     </span>
                   ) : (
                     <span className="text-muted-foreground">-</span>
                   )}
                 </td>
+                <td className="text-center p-3">{process.recommendationCount}</td>
               </tr>
             ))
           )}
