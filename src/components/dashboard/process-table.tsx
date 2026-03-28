@@ -36,7 +36,7 @@ export function ProcessTable({ processes }: ProcessTableProps) {
                     {process.name}
                   </Link>
                 </td>
-                <td className="text-center p-3 capitalize">{process.status}</td>
+                <td className="text-center p-3 capitalize">{process.status === 'analyzed' ? 'Analysé' : process.status === 'pending' ? 'En attente' : process.status}</td>
                 <td className="text-center p-3 font-medium">
                   {process.totalScore !== null && process.totalScore !== undefined
                     ? `${process.totalScore} (${process.percentage}%)`

@@ -33,3 +33,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes analysis-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.analysis-pulse {
+  animation: analysis-pulse 1.5s ease-in-out infinite;
+}

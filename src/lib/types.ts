@@ -1,6 +1,8 @@
 export interface ProcessStep {
   order: number;
   description: string;
+  type?: 'automatisable' | 'semi-automatisable' | 'manuel';
+  actor?: string;
 }
 
 export interface ProcessAction {
@@ -21,6 +23,11 @@ export interface ProcessAnalysis {
     totalActions: number;
     repetitiveTaskCount: number;
     humanInterventionCount: number;
+    systemStepCount?: number;
+    manualStepCount?: number;
+    decisionPointCount?: number;
+    automationReadiness?: number;
+    complexityLevel?: string;
   };
 }
 
@@ -49,6 +56,21 @@ export interface Recommendation {
   condition: string;
   suggestion: string;
   priority: "high" | "medium" | "low";
+  impact?: number;
+  effort?: number;
+  phase?: 'court-terme' | 'moyen-terme' | 'long-terme';
+  tools?: string[];
+}
+
+export interface CostEstimation {
+  manualCostPerExecution: number;
+  executionsPerMonth: number;
+  averageTimeMinutes: number;
+  estimatedAutomationCost: number;
+  monthlySavings: number;
+  annualSavings: number;
+  roiPercentage: number;
+  paybackMonths: number;
 }
 
 export interface Process {
@@ -59,6 +81,7 @@ export interface Process {
   analysis?: ProcessAnalysis;
   scoring?: ProcessScoring;
   recommendations?: Recommendation[];
+  costEstimation?: CostEstimation;
   createdAt: string;
   updatedAt: string;
 }
@@ -80,10 +103,20 @@ export interface DashboardProcess {
   id: string;
   name: string;
   status: string;
-  totalScore: number;
-  percentage: number;
-  classification: string;
+  totalScore: number | null;
+  percentage: number | null;
+  classification: string | null;
   recommendationCount: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface BIData {
+  scoreComparison: { name: string; score: number; classification: string | null }[];
+  criteriaAvg: { criterion: string; average: number; max: number }[];
+  stepTypeDistribution: { automatisable: number; semiAutomatisable: number; manuel: number };
+  complexityCounts: { faible: number; moyenne: number; élevée: number };
+  roiData: { name: string; annualSavings: number; automationCost: number; roiPercentage: number; paybackMonths: number }[];
+  recommendationBreakdown: { high: number; medium: number; low: number };
+  readinessData: { name: string; readiness: number }[];
 }

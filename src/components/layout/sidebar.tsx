@@ -8,7 +8,7 @@ const navItems = [
   { href: "/", label: "Accueil", icon: "🏠" },
   { href: "/processes", label: "Processus", icon: "📋" },
   { href: "/processes/new", label: "Nouveau", icon: "➕" },
-  { href: "/dashboard", label: "Dashboard", icon: "📊" },
+  { href: "/dashboard", label: "Tableau de bord", icon: "📊" },
 ];
 
 export function Sidebar() {
@@ -17,7 +17,7 @@ export function Sidebar() {
   return (
     <aside className="w-64 border-r bg-card hidden md:block">
       <div className="p-6">
-        <h1 className="text-lg font-bold text-primary">Process Automation</h1>
+        <h1 className="text-lg font-bold text-primary">Automatisation des Processus</h1>
         <p className="text-xs text-muted-foreground mt-1">Plateforme d'analyse</p>
       </div>
       <nav className="px-3 space-y-1">

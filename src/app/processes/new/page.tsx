@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiClient } from "@/lib/api";
 import { ProcessForm } from "@/components/process/process-form";
+import { AnalysisLoader } from "@/components/ui/loader";
 
 export default function NewProcessPage() {
   const router = useRouter();
@@ -13,8 +14,12 @@ export default function NewProcessPage() {
   const handleSubmit = async (data: { name: string; description: string }) => {
     setLoading(true);
     setError(null);
+    const minDelay = new Promise((r) => setTimeout(r, 5500));
     try {
-      const process = await apiClient.createProcess(data);
+      const [process] = await Promise.all([
+        apiClient.createProcess(data),
+        minDelay,
+      ]);
       router.push(`/processes/${process._id}`);
     } catch (err) {
       setError("Erreur lors de la creation du processus");
@@ -34,6 +39,7 @@ export default function NewProcessPage() {
       {error && (
         <div className="p-3 bg-destructive/10 text-destructive rounded-md">{error}</div>
       )}
+      {loading && <AnalysisLoader />}
       <ProcessForm onSubmit={handleSubmit} loading={loading} />
     </div>
   );

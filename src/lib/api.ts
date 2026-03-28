@@ -9,13 +9,13 @@ const api = axios.create({
 
 export const apiClient = {
   // Processes
-  createProcess: async (data: { name: string; description: string }) => {
+  createProcess: async (data: { name: string; description: string; manualCostPerExecution?: number; executionsPerMonth?: number; averageTimeMinutes?: number }) => {
     const response = await api.post("/processes", data);
     return response.data.data;
   },
 
-  getProcesses: async () => {
-    const response = await api.get("/processes");
+  getProcesses: async (params?: { search?: string; status?: string; classification?: string; sortBy?: string; order?: string }) => {
+    const response = await api.get("/processes", { params });
     return response.data.data;
   },
 
@@ -24,7 +24,7 @@ export const apiClient = {
     return response.data.data;
   },
 
-  updateProcess: async (id: string, data: { name?: string; description?: string }) => {
+  updateProcess: async (id: string, data: { name?: string; description?: string; manualCostPerExecution?: number; executionsPerMonth?: number; averageTimeMinutes?: number }) => {
     const response = await api.put(`/processes/${id}`, data);
     return response.data.data;
   },
@@ -48,6 +48,11 @@ export const apiClient = {
 
   getDashboardOverview: async () => {
     const response = await api.get("/dashboard/overview");
+    return response.data.data;
+  },
+
+  getDashboardBI: async () => {
+    const response = await api.get("/dashboard/bi");
     return response.data.data;
   },
 };

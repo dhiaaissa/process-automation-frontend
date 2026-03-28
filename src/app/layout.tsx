@@ -4,7 +4,7 @@ import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
 
 export const metadata: Metadata = {
-  title: "Process Automation Platform",
+  title: "Plateforme d'Automatisation des Processus",
   description: "Plateforme d'aide a la decision pour l'analyse et l'automatisation des processus metiers",
 };
 
